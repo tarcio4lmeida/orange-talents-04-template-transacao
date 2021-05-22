@@ -15,10 +15,10 @@ public class EstabelecimentoResponse implements Serializable {
 	public EstabelecimentoResponse() {
 	}
 
-	public EstabelecimentoResponse(String nome, String cidade, String endereco) {
-		this.nome = nome;
-		this.cidade = cidade;
-		this.endereco = endereco;
+	public EstabelecimentoResponse(Estabelecimento e) {
+		this.nome = e.getNome();
+		this.cidade = e.getCidade();
+		this.endereco = e.getEndereco();
 	}
 
 	public String getNome() {

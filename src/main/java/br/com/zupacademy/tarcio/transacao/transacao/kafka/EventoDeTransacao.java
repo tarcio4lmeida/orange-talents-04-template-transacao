@@ -3,6 +3,8 @@ package br.com.zupacademy.tarcio.transacao.transacao.kafka;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import br.com.zupacademy.tarcio.transacao.cartao.Cartao;
+import br.com.zupacademy.tarcio.transacao.cartao.CartaoRepository;
 import br.com.zupacademy.tarcio.transacao.cartao.CartaoResponse;
 import br.com.zupacademy.tarcio.transacao.estabelecimento.EstabelecimentoResponse;
 import br.com.zupacademy.tarcio.transacao.transacao.Transacao;
@@ -31,7 +33,7 @@ public class EventoDeTransacao {
 		this.cartao = cartao;
 		this.efetivadaEm = efetivadaEm;
 	}
-
+	
 	public String getId() {
 		return id;
 	}
@@ -52,8 +54,13 @@ public class EventoDeTransacao {
 		return efetivadaEm;
 	}
 
-	public Transacao toModel() {
-		return new Transacao(this.id, this.valor, this.estabelecimento.toModel(), this.cartao.toModel(), this.efetivadaEm);
+	public Transacao toModel(CartaoRepository cartaoRepository) {
+		Cartao cartao = cartaoRepository.findByUuid(this.cartao.getId());
+		if(cartao!=null) {
+			return new Transacao(this.id, this.valor, this.estabelecimento.toModel(), cartao, this.efetivadaEm);
+		}else {
+			return new Transacao(this.id, this.valor, this.estabelecimento.toModel(), this.cartao.toModel(), this.efetivadaEm);
+		}
 	}
 
 	@Override
